@@ -25,9 +25,9 @@ private:
     int id;
     double xCoord;
     double yCoord;
-    double dist;
     
 public:
+    City(int, double, double);
     void setID(int);
     int getID();
     void setXCoord(double);
@@ -36,23 +36,28 @@ public:
     double getYCoord();
     
     /*********************************************************************
-     ** Name: getDistance
-     ** Description: Returns the distance data (distance between city and
-     ** previous city in tour.
+     ** Name: getDist
+     ** Description: Returns the distance between this city and another
      ** Output: dist data
      *********************************************************************/
-    double getDist();
+    double getDist(City);
     
 };
 
-
-class Trip{
+class DistanceMatrix{
 private:
     std::vector<std::vector<double>> distMatrix;
     std::vector<City> cities;
-    std::vector<City*> optTour;
-    std::vector<City*> testTour;
-    
+public:
+    void addCity(City);
+    /*********************************************************************
+     ** Name: setCities
+     ** Description: Stores the vector of cities, will also fill out the 
+     ** distance matrix;
+     ** Input: City vector
+     ** Output: None
+     *********************************************************************/
+    void setCities(std::vector<City>);
     /*********************************************************************
      ** Name: Fill Distance Matrix
      ** Description: fills out the distance matrix based on the cities vector
@@ -60,6 +65,13 @@ private:
      ** Output: None
      *********************************************************************/
     void fillDistMatrix();
+};
+
+class Trip{
+private:
+    std::vector<City> cities;
+    std::vector<City*> optTour;
+    std::vector<City*> testTour;
     
     /*********************************************************************
      ** Name: Nearest neighbor
@@ -71,15 +83,6 @@ private:
     void nearNeighbor();
     
 public:
-    /*********************************************************************
-     ** Name: setCities
-     ** Description: Stores the vector of cities, will also fill out the 
-     ** distance matrix;
-     ** Input: City vector
-     ** Output: None
-     *********************************************************************/
-    void setCities(std::vector<City>);
-    
     /*********************************************************************
      ** Name: nearest neighbor
      ** Description: Initializes the tour based on the nearest neighbor
