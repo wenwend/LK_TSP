@@ -1,5 +1,24 @@
 # LK_TSP
 
+
+*About input files
+-Each line defines a city and each line has three numbers separated by white space.
+    The first number is the city identifier
+    The second number is the city’s x-coordinate
+    The third number is the city’s y-coordinate.
+
+*About current files
+lkMain.cpp - will read input files into two vector: 
+    *vector<int> id is the city identifier
+    *vector<pair<x,y>> coordinatates is the city x-coordinate and y-coordinate.
+  
+  
+*About (current status) compile and run
+g++ lkMain.cpp -o test
+./test
+
+
+*About the algorithm:
 Lin-Kernighan Heuristic:
 This is a generalization of the 2-Opt solution. 
 This heuristic is generally considered a benchmark that is to be used for comparing other solutions to. 
