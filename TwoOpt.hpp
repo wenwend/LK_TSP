@@ -28,6 +28,7 @@ private:
     
 public:
     City(int, double, double);
+    City(int, int, int);
     void setID(int);
     int getID();
     void setXCoord(double);
@@ -46,10 +47,10 @@ public:
 
 class DistanceMatrix{
 private:
-    std::vector<std::vector<double>> distMatrix;
-    std::vector<City> cities;
+    std::vector< std::vector<double> > distMatrix;
+    std::vector<City>* cities;
 public:
-    void addCity(City);
+    DistanceMatrix(std::vector<City>*);
     /*********************************************************************
      ** Name: setCities
      ** Description: Stores the vector of cities, will also fill out the 
@@ -57,7 +58,7 @@ public:
      ** Input: City vector
      ** Output: None
      *********************************************************************/
-    void setCities(std::vector<City>);
+    void setCities(std::vector<City>*);
     /*********************************************************************
      ** Name: Fill Distance Matrix
      ** Description: fills out the distance matrix based on the cities vector
@@ -65,6 +66,7 @@ public:
      ** Output: None
      *********************************************************************/
     void fillDistMatrix();
+    double getDistance(int, int);
 };
 
 class Trip{
