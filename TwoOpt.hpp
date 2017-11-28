@@ -76,6 +76,8 @@ private:
     std::vector<City>* cities;
     std::vector<City*> optTour;
     std::vector<City*> testTour;
+    void exchangeCities(int, int);
+    double calculateTourLength(std::vector<City*>);
     
 public:
     Trip(std::vector<City>*);
@@ -87,6 +89,7 @@ public:
      ** Output: None
      *********************************************************************/
     void nearNeighbor();
+    void runTwoOpt();
     
     /*********************************************************************
      ** Name: nearest neighbor
@@ -95,7 +98,8 @@ public:
      ** Output: None
      *********************************************************************/
     void initTour();
-    void printTour();
+    void printTour(std::ofstream &);
+    double calculateOptTourLength();
 };
 
 #endif /* TwoOpt_hpp */
