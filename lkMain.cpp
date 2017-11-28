@@ -5,41 +5,42 @@
 #include<sstream>
 #include "TwoOpt.hpp"
 
-//#include "lk.hpp"
-
 using namespace std;
 
-std::vector<int> id;
-std::vector<pair<double, double> > coord;
+/*Delete the two vectors instead we use a city class*/
+//std::vector<int> id;
+//std::vector<pair<double, double> > coord;
+
+/*Need fill the city vector for Matrix*/
+std::vector<City> city;
 
 int main() {
-    int i=0;
+
+	/*Read Input files*/
     std::ifstream ifs;
-    ifs.open("tsp_example_3.txt");
+    ifs.open("tsp_example_1.txt");
 
     std::string line;
-    int array[500];
+
     int n;
 	double x, y;
+	City temp = City(0,0,0);
 
     while(!ifs.eof()){
-        std::getline(ifs,line);
-
-        std::istringstream input(line);
-        std::string number;
-	i++;
-        while(std::getline(input,number,' ')){
-            std::istringstream iss(number);
-            iss>>n;
-            id.push_back(n);
-            iss>>x>>y;
-            coord.push_back(make_pair(x, y));
-            
-	    //cout<<"done reading";
+        while(std::getline(ifs,line)){
+        	std::istringstream iss(line);
+        	iss>>n;
+        	iss>>x>>y;
+        	temp = City (n,x,y);
+        	cout<<"City  "<< n <<" cood is "<<x<<" "<<y<<endl;
+        	city.push_back(temp);
         }
 
     }
-	cout<<"Total is "<<i-1<<" lines.";
+	DistanceMatrix c = DistanceMatrix(&city);
+	c.fillDistMatrix();
+
+	/*OutPut a result file*/
 
 	return 0;
 }
