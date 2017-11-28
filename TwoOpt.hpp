@@ -95,8 +95,7 @@ public:
      ** Output: None
      *********************************************************************/
     void initTour();
-    
-    
+    void printTour();
 };
 
 #endif /* TwoOpt_hpp */

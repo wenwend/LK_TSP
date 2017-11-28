@@ -125,7 +125,11 @@ void Trip::nearNeighbor(){
     
 }
 
-
+void Trip::printTour() {
+    for (int i = 0; i < optTour.size(); i++) {
+        std::cout << optTour.at(i)->getID() << std::endl;
+    }
+}
 
 /*
 int main() {
