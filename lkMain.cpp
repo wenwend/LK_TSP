@@ -19,7 +19,7 @@ int main() {
 	/*Read Input files*/
     std::ifstream ifs;
     ifs.open("tsp_example_1.txt");
-
+    
     std::string line;
 
     int n;
@@ -37,8 +37,9 @@ int main() {
         }
 
     }
-	DistanceMatrix c = DistanceMatrix(&city);
-	c.fillDistMatrix();
+    
+    Trip myTrip(&city);
+    myTrip.nearNeighbor();
 
 	/*OutPut a result file*/
 
