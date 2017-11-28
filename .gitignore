@@ -42,6 +42,7 @@ TwoOpt.xcodeproj
 *.exe
 *.out
 *.app
+TwoOptMain
 
 # Xcode
 #
