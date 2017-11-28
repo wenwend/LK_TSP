@@ -47,6 +47,14 @@ double City::getYCoord() {
     return this->yCoord;
 }
 
+void City::setVisited(bool statusIn){
+    visited = statusIn;
+}
+
+bool City::getVisited(){
+    return visited;
+}
+
 double City::getDist(City otherCity) {
     double xdist = getXCoord() - otherCity.getXCoord();
     double ydist = getYCoord() - otherCity.getYCoord();
@@ -93,12 +101,15 @@ Trip::Trip(std::vector<City>* cities)
         dMatrix.fillDistMatrix();
         optTour.resize(cities->size());
         testTour.resize(cities->size());
+        for (auto& n : *cities)
+            n.setVisited(false);
 }
 
 void Trip::nearNeighbor(){
     City* nearNeigh;
     
     optTour.at(0) = &cities->at(0);
+    cities->at(0).setVisited(false);
     
     for(int i = 0; i <= (int) optTour.size() - 2; i++){
         nearNeigh = NULL;
@@ -108,7 +119,7 @@ void Trip::nearNeighbor(){
             // Check if the city is already on the tour. If it isn't, and no neighbor has
             // been chosen, then use it as the nearest neighber. If a nearest neighbor already
             // exists, check if this new city is closer.
-            if(std::find(optTour.begin(), optTour.end(), &cities->at(j)) == optTour.end()){
+            if(!cities->at(j).getVisited()){
                 if(nearNeigh == NULL)
                     nearNeigh = &cities->at(j);
                 
@@ -120,6 +131,7 @@ void Trip::nearNeighbor(){
                 }
             }
         }
+        nearNeigh->setVisited(true);
         optTour.at(i + 1) = nearNeigh;
     }
     testTour = optTour;
