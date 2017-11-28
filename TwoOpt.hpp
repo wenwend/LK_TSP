@@ -26,6 +26,7 @@ private:
     int id;
     double xCoord;
     double yCoord;
+    bool visited;
     
 public:
     City(int, double, double);
@@ -36,6 +37,8 @@ public:
     double getXCoord();
     void setYCoord(double);
     double getYCoord();
+    void setVisited(bool);
+    bool getVisited();
     
     /*********************************************************************
      ** Name: getDist
