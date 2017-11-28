@@ -11,7 +11,7 @@ using namespace std;
 //std::vector<int> id;
 //std::vector<pair<double, double> > coord;
 
-int main() {
+int main(int argc, char** argv) {
 
 	/*Need fill the city vector for Matrix*/
 	std::vector<City> city;
@@ -19,10 +19,16 @@ int main() {
 	/*Read Input files*/
     std::ifstream ifs;
 
-    ifs.open("tsp_example_1.txt");
+	if (argc != 2) {
+		std::cout << "Usage: ./TwoOptMain <filename>" << std::endl;
+		std::cout << "<filename> contains the input text file" << std::endl;
+		return 1;
+	}
+
+    ifs.open(argv[1]);
 	if (!ifs) {
 		std::cout << "Unable to open file" << std::endl;
-		return -1;
+		return 1;
 	}
     
     std::string line;
