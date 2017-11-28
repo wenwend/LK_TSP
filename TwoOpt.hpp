@@ -19,6 +19,7 @@
 #include <sstream>
 #include <map>
 #include <queue>
+#include <algorithm>
 
 class City{
 private:
@@ -71,10 +72,13 @@ public:
 
 class Trip{
 private:
-    std::vector<City> cities;
+    DistanceMatrix dMatrix;
+    std::vector<City>* cities;
     std::vector<City*> optTour;
     std::vector<City*> testTour;
     
+public:
+    Trip(std::vector<City>*);
     /*********************************************************************
      ** Name: Nearest neighbor
      ** Description: fills out the optimal tour based on the nearest neighbor
@@ -84,7 +88,6 @@ private:
      *********************************************************************/
     void nearNeighbor();
     
-public:
     /*********************************************************************
      ** Name: nearest neighbor
      ** Description: Initializes the tour based on the nearest neighbor
@@ -92,8 +95,7 @@ public:
      ** Output: None
      *********************************************************************/
     void initTour();
-    
-    
+    void printTour();
 };
 
 #endif /* TwoOpt_hpp */
