@@ -122,22 +122,59 @@ void Trip::nearNeighbor(){
         }
         optTour.at(i + 1) = nearNeigh;
     }
-    
+    testTour = optTour;
 }
-
-void Trip::printTour() {
+void Trip::runTwoOpt() {
+    double oldLength = calculateTourLength(optTour);
     for (int i = 0; i < optTour.size(); i++) {
-        std::cout << optTour.at(i)->getID() << std::endl;
+        for (int j = i + 1; j < optTour.size(); j++) {
+            exchangeCities(i, j);
+            double newLength = calculateTourLength(testTour);
+            if (newLength < oldLength) {
+                optTour = testTour;
+                oldLength = newLength;
+            }
+        }
     }
 }
 
-/*
-int main() {
-    std::vector<City> a;
-    City b = City(0, 3.0, 5.0);
-    a.push_back(b);
-    DistanceMatrix c = DistanceMatrix();
-    c.setCities(&a);
-    c.fillDistMatrix();
-    return 0;
-}*/
+double Trip::calculateTourLength(std::vector<City*> tour) {
+    if (tour.size() == 1) {
+        return 0;
+    }
+    double tourLength = 0;
+    for (int i = 1; i < tour.size(); i++) {
+        tourLength += dMatrix.getDistance(tour.at(i)->getID(),
+            tour.at(i-1)->getID());
+    }
+    tourLength += dMatrix.getDistance(tour.at(tour.size()-1)->getID(),
+        tour.at(0)->getID());
+    return tourLength;
+}
+
+double Trip::calculateOptTourLength() {
+    return calculateTourLength(optTour);
+}
+
+void Trip::exchangeCities(int i, int j) {
+    if (i == j) {
+        return;
+    }    
+    for (int k = 0; k < i; k++) {
+        testTour.at(k) = optTour.at(k);
+    }
+    int inc = i;
+    for (int h = j; h >= i; h--) {
+        testTour.at(inc) = optTour.at(h);
+        inc++;
+    }
+    for (int k = j + 1; k < optTour.size(); k++) {
+        testTour.at(k) = optTour.at(k);
+    }
+}
+
+void Trip::printTour(std::ofstream &outputFile) {
+    for (int i = 0; i < optTour.size(); i++) {
+        outputFile << optTour.at(i)->getID() << std::endl;
+    }
+}
