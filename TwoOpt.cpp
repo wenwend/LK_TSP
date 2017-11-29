@@ -146,13 +146,18 @@ void Trip::nearNeighbor(){
 }
 void Trip::runTwoOpt() {
     double oldLength = calculateTourLength(optTour);
-    for (int i = 0; i < optTour.size(); i++) {
+    for (int i = 0; i < optTour.size() - 1; i++) {
         for (int j = i + 1; j < optTour.size(); j++) {
-            exchangeCities(i, j);
-            double newLength = calculateTourLength(testTour);
-            if (newLength < oldLength) {
-                optTour = testTour;
-                oldLength = newLength;
+            if (j != optTour.size() - 1 && i != 0 &&
+                checkIntersection(optTour.at(i-1), optTour.at(i),
+                optTour.at(j), optTour.at(j+1))) {
+                exchangeCities(i, j);
+                double newLength = calculateTourLength(testTour);
+                if (newLength < oldLength) {
+                    optTour = testTour;
+                    oldLength = newLength;
+                    break;
+                }
             }
         }
     }
@@ -197,4 +202,30 @@ void Trip::printTour(std::ofstream &outputFile) {
     for (int i = 0; i < optTour.size(); i++) {
         outputFile << optTour.at(i)->getID() << std::endl;
     }
+}
+
+double Trip::crossProduct(City* A, City* B, City* C, City* D) {
+   float Ux = B->getXCoord() - A->getXCoord();
+   float Uy = B->getYCoord() - A->getYCoord();
+   float Vx = D->getXCoord() - C->getXCoord();
+   float Vy = D->getYCoord() - D->getYCoord();
+   return (Ux * Vy) - (Uy * Vx);
+}
+
+bool Trip::onSegment(City* A, City* C, City* B) {
+    return (A->getDist(*C) + C->getDist(*B) == A->getDist(*B));
+}
+
+bool Trip::checkIntersection(City* A, City* B, City* C, City* D) {
+    if ( (crossProduct(A, B, B, C)*crossProduct(A, B, B, D)) < 0 &&
+        (crossProduct(C, D, D, A)*crossProduct(C, D, D, B)) < 0) {
+        return true;
+    }
+
+    if (onSegment(A, C, B) || onSegment(A, D, B) || onSegment(C, A, D) ||
+        onSegment(C, B, D)) {
+        return true;
+    }
+
+    return false;
 }
