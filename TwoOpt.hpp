@@ -45,8 +45,7 @@ public:
      ** Description: Returns the distance between this city and another
      ** Output: dist data
      *********************************************************************/
-    double getDist(City);
-    
+    double getDist(City);    
 };
 
 class DistanceMatrix{
@@ -103,6 +102,16 @@ public:
     void initTour();
     void printTour(std::ofstream &);
     double calculateOptTourLength();
+    /*********************************************************************
+     ** Name: crossProduct
+     ** Description: Finds the cross product magnitude of the two vectors
+     ** Input: First two City pointers share and edge, as do the last two.
+     ** Output: Cross product of the edge created by the first two cities,
+     **         and the edge created by the last two cities.
+     *********************************************************************/
+    double crossProduct(City*, City*, City*, City*);
+    bool onSegment(City*, City*, City*);
+    bool checkIntersection(City*, City*, City*, City*);
 };
 
 #endif /* TwoOpt_hpp */
