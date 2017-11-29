@@ -55,10 +55,18 @@ bool City::getVisited(){
     return visited;
 }
 
-double City::getDist(City otherCity) {
+int City::getDist(City otherCity) {
     double xdist = getXCoord() - otherCity.getXCoord();
     double ydist = getYCoord() - otherCity.getYCoord();
-    return sqrt(pow(xdist, 2.0) + pow(ydist, 2.0));
+    double result= sqrt(pow(xdist, 2.0) + pow(ydist, 2.0));
+    double temp = round(result);
+
+    if(temp - result < 0)
+    {
+    	return (int) temp +1;
+    }
+    else return (int) temp;
+
 }
 
 DistanceMatrix::DistanceMatrix(std::vector<City>* cities) {
@@ -73,15 +81,15 @@ void DistanceMatrix::fillDistMatrix() {
     int size = (int) cities->size();
     distMatrix.reserve(size);
     for (int i = 0; i < size; i++) {
-        std::vector<double> curRow;
+        std::vector<int> curRow;
         curRow.reserve(size);
         for (int j = 0; j < size; j++) {
             if (i == j) {
-                curRow.push_back(0.0);
+                curRow.push_back(0);
             }
             else {
                 // Distance between this city and another
-                double dist = cities->at(i).getDist(cities->at(j));
+                int dist = cities->at(i).getDist(cities->at(j));
                 curRow.push_back(dist);
             }
         }
@@ -89,7 +97,7 @@ void DistanceMatrix::fillDistMatrix() {
     }
 }
 
-double DistanceMatrix::getDistance(int cityID1, int cityID2) {
+int DistanceMatrix::getDistance(int cityID1, int cityID2) {
     return distMatrix.at(cityID1).at(cityID2);
 }
 

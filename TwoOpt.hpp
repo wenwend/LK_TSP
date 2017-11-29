@@ -45,12 +45,14 @@ public:
      ** Description: Returns the distance between this city and another
      ** Output: dist data
      *********************************************************************/
-    double getDist(City);    
+
+    int getDist(City);
+   
 };
 
 class DistanceMatrix{
 private:
-    std::vector< std::vector<double> > distMatrix;
+    std::vector< std::vector<int> > distMatrix;
     std::vector<City>* cities;
 public:
     DistanceMatrix(std::vector<City>*);
@@ -69,7 +71,7 @@ public:
      ** Output: None
      *********************************************************************/
     void fillDistMatrix();
-    double getDistance(int, int);
+    int getDistance(int, int);
 };
 
 class Trip{
