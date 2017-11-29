@@ -55,10 +55,18 @@ bool City::getVisited(){
     return visited;
 }
 
-double City::getDist(City otherCity) {
+int City::getDist(City otherCity) {
     double xdist = getXCoord() - otherCity.getXCoord();
     double ydist = getYCoord() - otherCity.getYCoord();
-    return sqrt(pow(xdist, 2.0) + pow(ydist, 2.0));
+    double result= sqrt(pow(xdist, 2.0) + pow(ydist, 2.0));
+    double temp = round(result);
+
+    if(temp - result < 0)
+    {
+    	return (int) temp +1;
+    }
+    else return (int) temp;
+
 }
 
 DistanceMatrix::DistanceMatrix(std::vector<City>* cities) {
