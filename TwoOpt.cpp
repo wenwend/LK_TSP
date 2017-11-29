@@ -60,13 +60,7 @@ int City::getDist(City otherCity) {
     double ydist = getYCoord() - otherCity.getYCoord();
     double result= sqrt(pow(xdist, 2.0) + pow(ydist, 2.0));
     double temp = round(result);
-
-    if(temp - result < 0)
-    {
-    	return (int) temp +1;
-    }
-    else return (int) temp;
-
+    return (int)temp;
 }
 
 DistanceMatrix::DistanceMatrix(std::vector<City>* cities) {
