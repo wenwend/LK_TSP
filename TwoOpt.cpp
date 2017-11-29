@@ -81,15 +81,15 @@ void DistanceMatrix::fillDistMatrix() {
     int size = (int) cities->size();
     distMatrix.reserve(size);
     for (int i = 0; i < size; i++) {
-        std::vector<double> curRow;
+        std::vector<int> curRow;
         curRow.reserve(size);
         for (int j = 0; j < size; j++) {
             if (i == j) {
-                curRow.push_back(0.0);
+                curRow.push_back(0);
             }
             else {
                 // Distance between this city and another
-                double dist = cities->at(i).getDist(cities->at(j));
+                int dist = cities->at(i).getDist(cities->at(j));
                 curRow.push_back(dist);
             }
         }
@@ -97,7 +97,7 @@ void DistanceMatrix::fillDistMatrix() {
     }
 }
 
-double DistanceMatrix::getDistance(int cityID1, int cityID2) {
+int DistanceMatrix::getDistance(int cityID1, int cityID2) {
     return distMatrix.at(cityID1).at(cityID2);
 }
 
