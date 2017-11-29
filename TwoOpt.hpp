@@ -45,7 +45,7 @@ public:
      ** Description: Returns the distance between this city and another
      ** Output: dist data
      *********************************************************************/
-    double getDist(City);
+    int getDist(City);
     
 };
 
