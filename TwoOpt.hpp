@@ -81,6 +81,7 @@ private:
     std::vector<City*> testTour;
     void exchangeCities(int, int);
     double calculateTourLength(std::vector<City*>);
+    double calcVirtTourLength(int, int);
     
 public:
     Trip(std::vector<City>*);
