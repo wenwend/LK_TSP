@@ -4,6 +4,7 @@
 #include<string>
 #include<sstream>
 #include <ctime>
+#include <iomanip>
 #include "TwoOpt.hpp"
 
 using namespace std;
@@ -62,6 +63,8 @@ int main(int argc, char** argv) {
 	output_filename = argv[1];
 	output_filename += ".tour";
 	ofs.open(output_filename);
+	ofs << fixed;
+	ofs << setprecision(0);
 	ofs << myTrip.calculateOptTourLength() << std::endl;
 	myTrip.printTour(ofs);
 

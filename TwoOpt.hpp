@@ -45,13 +45,14 @@ public:
      ** Description: Returns the distance between this city and another
      ** Output: dist data
      *********************************************************************/
-    double getDist(City);
-    
+
+    int getDist(City);
+   
 };
 
 class DistanceMatrix{
 private:
-    std::vector< std::vector<double> > distMatrix;
+    std::vector< std::vector<int> > distMatrix;
     std::vector<City>* cities;
 public:
     DistanceMatrix(std::vector<City>*);
@@ -70,7 +71,7 @@ public:
      ** Output: None
      *********************************************************************/
     void fillDistMatrix();
-    double getDistance(int, int);
+    int getDistance(int, int);
 };
 
 class Trip{
@@ -103,6 +104,16 @@ public:
     void initTour();
     void printTour(std::ofstream &);
     double calculateOptTourLength();
+    /*********************************************************************
+     ** Name: crossProduct
+     ** Description: Finds the cross product magnitude of the two vectors
+     ** Input: First two City pointers share and edge, as do the last two.
+     ** Output: Cross product of the edge created by the first two cities,
+     **         and the edge created by the last two cities.
+     *********************************************************************/
+    double crossProduct(City*, City*, City*, City*);
+    bool onSegment(City*, City*, City*);
+    bool checkIntersection(City*, City*, City*, City*);
 };
 
 #endif /* TwoOpt_hpp */
