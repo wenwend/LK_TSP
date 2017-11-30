@@ -142,15 +142,24 @@ void Trip::runTwoOpt() {
     double oldLength = calculateTourLength(optTour);
     for (int i = 0; i < optTour.size() - 1; i++) {
         for (int j = i + 1; j < optTour.size(); j++) {
-            if (j != optTour.size() - 1 && i != 0 &&
-                checkIntersection(optTour.at(i-1), optTour.at(i),
-                optTour.at(j), optTour.at(j+1))) {
+            if (optTour.size() > 500) {
+                if (j != optTour.size() - 1 && i != 0 &&
+                    checkIntersection(optTour.at(i-1), optTour.at(i),
+                    optTour.at(j), optTour.at(j+1))) {
+                    exchangeCities(i, j);
+                    double newLength = calculateTourLength(testTour);
+                    if (newLength < oldLength) {
+                        optTour = testTour;
+                        oldLength = newLength;
+                    }
+                }
+            }
+            else {
                 exchangeCities(i, j);
                 double newLength = calculateTourLength(testTour);
                 if (newLength < oldLength) {
                     optTour = testTour;
                     oldLength = newLength;
-                    break;
                 }
             }
         }
