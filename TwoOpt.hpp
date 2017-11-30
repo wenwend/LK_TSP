@@ -20,6 +20,7 @@
 #include <map>
 #include <queue>
 #include <algorithm>
+#include <limits>
 
 class City{
 private:
@@ -82,6 +83,7 @@ private:
     std::vector<City*> testTour;
     void exchangeCities(int, int);
     double calculateTourLength(std::vector<City*>);
+    int calcVirtTourLength(int, int);
     
 public:
     Trip(std::vector<City>*);
@@ -94,6 +96,7 @@ public:
      *********************************************************************/
     void nearNeighbor();
     void runTwoOpt();
+    void runTwoOptAlt();
     
     /*********************************************************************
      ** Name: nearest neighbor
