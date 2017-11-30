@@ -55,10 +55,12 @@ bool City::getVisited(){
     return visited;
 }
 
-double City::getDist(City otherCity) {
+int City::getDist(City otherCity) {
     double xdist = getXCoord() - otherCity.getXCoord();
     double ydist = getYCoord() - otherCity.getYCoord();
-    return sqrt(pow(xdist, 2.0) + pow(ydist, 2.0));
+    double result= sqrt(pow(xdist, 2.0) + pow(ydist, 2.0));
+    double temp = round(result);
+    return (int)temp;
 }
 
 DistanceMatrix::DistanceMatrix(std::vector<City>* cities) {
@@ -73,15 +75,15 @@ void DistanceMatrix::fillDistMatrix() {
     int size = (int) cities->size();
     distMatrix.reserve(size);
     for (int i = 0; i < size; i++) {
-        std::vector<double> curRow;
+        std::vector<int> curRow;
         curRow.reserve(size);
         for (int j = 0; j < size; j++) {
             if (i == j) {
-                curRow.push_back(0.0);
+                curRow.push_back(0);
             }
             else {
                 // Distance between this city and another
-                double dist = cities->at(i).getDist(cities->at(j));
+                int dist = cities->at(i).getDist(cities->at(j));
                 curRow.push_back(dist);
             }
         }
@@ -89,7 +91,7 @@ void DistanceMatrix::fillDistMatrix() {
     }
 }
 
-double DistanceMatrix::getDistance(int cityID1, int cityID2) {
+int DistanceMatrix::getDistance(int cityID1, int cityID2) {
     return distMatrix.at(cityID1).at(cityID2);
 }
 
@@ -139,15 +141,44 @@ void Trip::nearNeighbor(){
 void Trip::runTwoOpt() {
     double virtualLength = 0;
     double oldLength = calculateTourLength(optTour);
-    for (int i = 0; i < optTour.size(); i++) {
+    for (int i = 0; i < optTour.size() - 1; i++) {
         for (int j = i + 1; j < optTour.size(); j++) {
-            virtualLength = calcVirtTourLength(i, j);
-            if(virtualLength < oldLength){
+            if (j != optTour.size() - 1 && i != 0 &&
+                checkIntersection(optTour.at(i-1), optTour.at(i),
+                optTour.at(j), optTour.at(j+1))) {
                 exchangeCities(i, j);
-                optTour = testTour;
-                oldLength = virtualLength;
+                double newLength = calculateTourLength(testTour);
+                if (newLength < oldLength) {
+                    optTour = testTour;
+                    oldLength = newLength;
+                    break;
+                }
             }
         }
+    }
+}
+    
+void Trip::runTwoOptAlt(){
+    int virtualLength = 0;
+    int oldLength = calculateTourLength(optTour);
+    int storeI, storeJ;
+    storeI = storeJ = 0;
+    for (int i = 0; i < optTour.size() - 1; i++) {
+        for (int j = i + 1; j < optTour.size(); j++) {
+
+            if (j != optTour.size() - 1 && i != 0 &&
+                checkIntersection(optTour.at(i-1), optTour.at(i),
+                                  optTour.at(j), optTour.at(j+1))) {
+                    virtualLength = calcVirtTourLength(i, j);
+                    if(virtualLength < oldLength){
+                        storeI = i;
+                        storeJ = j;
+                        oldLength = virtualLength;
+                    }
+                
+                }
+        }
+        exchangeCities(storeI, storeJ);
     }
 }
 
@@ -222,4 +253,30 @@ void Trip::printTour(std::ofstream &outputFile) {
     for (int i = 0; i < optTour.size(); i++) {
         outputFile << optTour.at(i)->getID() << std::endl;
     }
+}
+
+double Trip::crossProduct(City* A, City* B, City* C, City* D) {
+   float Ux = B->getXCoord() - A->getXCoord();
+   float Uy = B->getYCoord() - A->getYCoord();
+   float Vx = D->getXCoord() - C->getXCoord();
+   float Vy = D->getYCoord() - D->getYCoord();
+   return (Ux * Vy) - (Uy * Vx);
+}
+
+bool Trip::onSegment(City* A, City* C, City* B) {
+    return (A->getDist(*C) + C->getDist(*B) == A->getDist(*B));
+}
+
+bool Trip::checkIntersection(City* A, City* B, City* C, City* D) {
+    if ( (crossProduct(A, B, B, C)*crossProduct(A, B, B, D)) < 0 &&
+        (crossProduct(C, D, D, A)*crossProduct(C, D, D, B)) < 0) {
+        return true;
+    }
+
+    if (onSegment(A, C, B) || onSegment(A, D, B) || onSegment(C, A, D) ||
+        onSegment(C, B, D)) {
+        return true;
+    }
+
+    return false;
 }
