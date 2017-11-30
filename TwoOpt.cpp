@@ -139,7 +139,6 @@ void Trip::nearNeighbor(){
     testTour = optTour;
 }
 void Trip::runTwoOpt() {
-    double virtualLength = 0;
     double oldLength = calculateTourLength(optTour);
     for (int i = 0; i < optTour.size() - 1; i++) {
         for (int j = i + 1; j < optTour.size(); j++) {
@@ -161,24 +160,27 @@ void Trip::runTwoOpt() {
 void Trip::runTwoOptAlt(){
     int virtualLength = 0;
     int oldLength = calculateTourLength(optTour);
+    int lengthSave = oldLength;
     int storeI, storeJ;
-    storeI = storeJ = 0;
     for (int i = 0; i < optTour.size() - 1; i++) {
+        storeI = storeJ = 0;
         for (int j = i + 1; j < optTour.size(); j++) {
 
-            if (j != optTour.size() - 1 && i != 0 &&
-                checkIntersection(optTour.at(i-1), optTour.at(i),
-                                  optTour.at(j), optTour.at(j+1))) {
-                    virtualLength = calcVirtTourLength(i, j);
-                    if(virtualLength < oldLength){
-                        storeI = i;
-                        storeJ = j;
-                        oldLength = virtualLength;
-                    }
-                
-                }
+            virtualLength = calcVirtTourLength(i, j);
+            if(virtualLength < lengthSave){
+                storeI = i;
+                storeJ = j;
+                lengthSave = virtualLength;
+            
+            }
+            
         }
+        
         exchangeCities(storeI, storeJ);
+        optTour = testTour;
+        oldLength = calculateTourLength(optTour);
+        lengthSave = oldLength;
+
     }
 }
 
@@ -196,34 +198,39 @@ double Trip::calculateTourLength(std::vector<City*> tour) {
     return tourLength;
 }
 
-double Trip::calcVirtTourLength(int i, int j){
-    double tourLength = 0;
+int Trip::calcVirtTourLength(int i, int j){
+    int tourLength = 0;
     
-    if (i == j || j == optTour.size() - 1) {
-        return INFINITY;
+    if (i == j || i == 0) {
+        return std::numeric_limits<int>::max();
     }
-    for (int k = 0; k < i; k++) {
+    
+    for (int k = 1; k < i; k++) {
         tourLength += dMatrix.getDistance(optTour.at(k)->getID(),
-                                          optTour.at(k+1)->getID());
+                                          optTour.at(k-1)->getID());
     }
     
-    tourLength += dMatrix.getDistance(optTour.at(i)->getID(),
-                                     optTour.at(j)->getID());
-    for (int h = j; h > i + 1; h--) {
-        tourLength += dMatrix.getDistance(optTour.at(h)->getID(),
-                                          optTour.at(h-1)->getID());
-    }
-    
-    tourLength += dMatrix.getDistance(optTour.at(i+1)->getID(),
-                                      optTour.at(j+1)->getID());
-    
-    for (int k = j + 1; k < optTour.size() - 1; k++) {
+    for (int k = i + 1; k <= j; k++) {
         tourLength += dMatrix.getDistance(optTour.at(k)->getID(),
-                                          optTour.at(k+1)->getID());
+                                          optTour.at(k-1)->getID());
     }
     
-    tourLength += dMatrix.getDistance(optTour.back()->getID(),
-                                      optTour.at(0)->getID());
+    for (int k = j + 2; k <= optTour.size() - 1; k++) {
+        tourLength += dMatrix.getDistance(optTour.at(k)->getID(),
+                                          optTour.at(k-1)->getID());
+    }
+    
+    tourLength += dMatrix.getDistance(optTour.at(i - 1)->getID(),
+                                      optTour.at(j)->getID());
+    if(j == optTour.size() - 1){
+        tourLength += dMatrix.getDistance(optTour.at(i)->getID(),
+                                          optTour.at(0)->getID());
+    } else{
+        tourLength += dMatrix.getDistance(optTour.at(i)->getID(),
+                                          optTour.at(j+1)->getID());
+        tourLength += dMatrix.getDistance(optTour.back()->getID(),
+                                          optTour.at(0)->getID());
+    }
     
     return tourLength;
 }
